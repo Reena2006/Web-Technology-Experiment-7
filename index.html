@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 7 - Working with jQuery</title>
+
+    <!-- jQuery Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
+        }
+
+        header p {
+            margin: 5px;
+        }
+
+        .student-info {
+            text-align: right;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 25px auto;
+            padding: 0 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #00000012;
+        }
+
+        h2 {
+            color: #1d4ed8;
+            margin-top: 0;
+            border-bottom: 2px solid #dbeafe;
+            padding-bottom: 12px;
+        }
+
+        h3 {
+            color: #334155;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: #1e40af;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .result {
+            margin-top: 18px;
+            padding: 16px;
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            border-radius: 6px;
+            line-height: 1.9;
+        }
+
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+            color: #047857;
+        }
+
+        .cake-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            text-align: center;
+        }
+
+        .cake {
+            background: #fff7ed;
+            padding: 16px 10px;
+            border-radius: 9px;
+            border: 1px solid #fed7aa;
+        }
+
+        .cake-icon {
+            font-size: 45px;
+            margin-bottom: 8px;
+        }
+
+        .cake h3 {
+            font-size: 14px;
+            min-height: 34px;
+            margin: 5px 0;
+        }
+
+        .cake .price {
+            color: #be123c;
+            font-weight: bold;
+        }
+
+        .cake input {
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .purchase {
+            text-align: center;
+            margin-top: 20px;
+            border-top: 2px solid #dbeafe;
+            padding-top: 15px;
+            display: none;
+        }
+
+        /* Car Workshop */
+
+        .workshop {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .car-scene {
+            height: 235px;
+            background: linear-gradient(#e0f2fe 0 75%, #cbd5e1 75% 100%);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .car-body {
+            width: 310px;
+            height: 65px;
+            background: #22c55e;
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 12px 25px 8px 8px;
+        }
+
+        .car-roof {
+            position: absolute;
+            top: -42px;
+            left: 65px;
+            width: 170px;
+            height: 48px;
+            background: #22c55e;
+            clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
+        }
+
+        .window {
+            position: absolute;
+            top: -35px;
+            left: 91px;
+            width: 117px;
+            height: 34px;
+            background: #bae6fd;
+            clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
+        }
+
+        .wheel {
+            position: absolute;
+            top: 43px;
+            width: 57px;
+            height: 57px;
+            border-radius: 50%;
+            background: #172554;
+            border: 7px solid #64748b;
+        }
+
+        .wheel.left {
+            left: 35px;
+        }
+
+        .wheel.right {
+            right: 35px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .controls label {
+            margin-top: 0;
+        }
+
+        .controls input[type="color"] {
+            height: 45px;
+            padding: 3px;
+        }
+
+        .controls input[type="range"] {
+            padding: 0;
+        }
+
+        footer {
+            text-align: center;
+            background: #172554;
+            color: white;
+            padding: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cake-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .car-body {
+                transform: translateX(-50%) scale(.8);
+            }
+        }
+
+        @media (max-width: 380px) {
+            .cake-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="student-info">
+        <strong>Chelsea Reena</strong><br>
+        URK24CS9027
+    </div>
+
+    <h1>WEB TECHNOLOGY LAB</h1>
+    <p>Experiment No. 07</p>
+    <p><strong>WORKING WITH jQuery</strong></p>
+</header>
+
+<div class="container">
+
+    <!-- QUESTION 1: BUDGET CALCULATOR -->
+
+    <section class="card">
+        <h2>1. Budget Calculator</h2>
+
+        <p>
+            Enter your total amount and allocate it among room rent,
+            accessories, emergency expenses and savings.
+            The percentages must add up to 100%.
+        </p>
+
+        <label for="budget">Total Amount (₹)</label>
+        <input type="number" id="budget" min="0"
+               placeholder="Enter total amount">
+
+        <div class="grid">
+            <div>
+                <label for="rentPercent">Room Rent (%)</label>
+                <input type="number" id="rentPercent"
+                       value="30" min="0" max="100">
+            </div>
+
+            <div>
+                <label for="accessoryPercent">Accessories (%)</label>
+                <input type="number" id="accessoryPercent"
+                       value="20" min="0" max="100">
+            </div>
+
+            <div>
+                <label for="emergencyPercent">Emergency (%)</label>
+                <input type="number" id="emergencyPercent"
+                       value="20" min="0" max="100">
+            </div>
+
+            <div>
+                <label for="savingPercent">Savings (%)</label>
+                <input type="number" id="savingPercent"
+                       value="30" min="0" max="100">
+            </div>
+        </div>
+
+        <button id="evaluateBudget">Evaluate My Money</button>
+
+        <div id="budgetResult" class="result" style="display:none;">
+            <div>Room Rent: <strong id="rentValue"></strong></div>
+            <div>Accessories: <strong id="accessoryValue"></strong></div>
+            <div>Emergency: <strong id="emergencyValue"></strong></div>
+            <div>Savings: <strong id="savingValue"></strong></div>
+            <hr>
+            <div class="total" id="budgetTotal"></div>
+        </div>
+    </section>
+
+    <!-- QUESTION 2: CAKE ORDER CALCULATOR -->
+
+    <section class="card">
+        <h2>2. Cake Order Calculator</h2>
+
+        <p style="text-align:center;">
+            Select the quantity of each cake and calculate your order.
+        </p>
+
+        <div class="cake-grid">
+
+            <div class="cake">
+                <div class="cake-icon">🎂</div>
+                <h3>Color Cake</h3>
+                <div class="price">₹300 each</div>
+                <label for="colorCake">Quantity</label>
+                <input type="number" id="colorCake"
+                       min="0" value="2">
+            </div>
+
+            <div class="cake">
+                <div class="cake-icon">🍫</div>
+                <h3>Brown Cake</h3>
+                <div class="price">₹300 each</div>
+                <label for="brownCake">Quantity</label>
+                <input type="number" id="brownCake"
+                       min="0" value="1">
+            </div>
+
+            <div class="cake">
+                <div class="cake-icon">🍰</div>
+                <h3>Milky Cake</h3>
+                <div class="price">₹250 each</div>
+                <label for="milkyCake">Quantity</label>
+                <input type="number" id="milkyCake"
+                       min="0" value="2">
+            </div>
+
+            <div class="cake">
+                <div class="cake-icon">🍒</div>
+                <h3>Black Forest Cake</h3>
+                <div class="price">₹350 each</div>
+                <label for="blackCake">Quantity</label>
+                <input type="number" id="blackCake"
+                       min="0" value="1">
+            </div>
+
+        </div>
+
+        <div style="text-align:center;">
+            <button id="orderCake">Place Order</button>
+        </div>
+
+        <div class="purchase">
+            <h3>Purchase Order Bill</h3>
+            <div id="cakeResult" class="total">
+                Total Price: ₹0
+            </div>
+            <p id="cakeBreakdown"></p>
+        </div>
+    </section>
+
+    <!-- QUESTION 3: CAR BODY WORKSHOP -->
+
+    <section class="card">
+        <h2>3. Car Body Workshop</h2>
+
+        <p>
+            Customize the car by changing its body colour,
+            glass tint and tyre size using jQuery actions.
+        </p>
+
+        <div class="workshop">
+
+            <h3 style="text-align:center;">Car Workshop</h3>
+
+            <div class="car-scene">
+                <div class="car-body" id="carBody">
+
+                    <div class="car-roof" id="carRoof"></div>
+                    <div class="window" id="carWindow"></div>
+                    <div class="wheel left" id="wheelLeft"></div>
+                    <div class="wheel right" id="wheelRight"></div>
+
+                </div>
+            </div>
+
+            <div class="controls">
+
+                <div>
+                    <label for="bodyColor">Change Body Colour</label>
+                    <input type="color" id="bodyColor"
+                           value="#22c55e">
+                </div>
+
+                <div>
+                    <label for="glassTint">Change Glass Tint</label>
+                    <select id="glassTint">
+                        <option value="#bae6fd">Light Blue</option>
+                        <option value="#64748b">Grey</option>
+                        <option value="#0f172a">Black</option>
+                        <option value="#bbf7d0">Light Green</option>
+                        <option value="#fecaca">Light Red</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="tyreSize">Tyre Size</label>
+                    <input type="range" id="tyreSize"
+                           min="40" max="75" value="57">
+                    <span id="tyreLabel">57 px</span>
+                </div>
+
+            </div>
+
+            <button id="resetCar">Reset Car</button>
+
+            <p id="carMessage" class="total">
+                Your car is ready for customization!
+            </p>
+
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <p>Experiment No. 07 - Working with jQuery</p>
+    <p>Chelsea Reena | URK24CS9027</p>
+</footer>
+
+<script>
+$(document).ready(function() {
+
+    // QUESTION 1: BUDGET CALCULATOR
+
+    $("#evaluateBudget").click(function() {
+
+        let amount = Number($("#budget").val());
+
+        let rent = Number($("#rentPercent").val());
+        let accessories = Number($("#accessoryPercent").val());
+        let emergency = Number($("#emergencyPercent").val());
+        let savings = Number($("#savingPercent").val());
+
+        let percentages = [rent, accessories, emergency, savings];
+
+        if ($("#budget").val() === "" ||
+            !Number.isFinite(amount) || amount <= 0) {
+
+            alert("Please enter a valid total amount.");
+            return;
+        }
+
+        if (percentages.some(function(p) {
+            return p < 0 || p > 100;
+        })) {
+            alert("Each percentage must be between 0 and 100.");
+            return;
+        }
+
+        let totalPercentage = rent + accessories + emergency + savings;
+
+        if (totalPercentage !== 100) {
+            alert("The percentages must add up to exactly 100%.");
+            $("#budgetResult").hide();
+            return;
+        }
+
+        let rentAmount = amount * rent / 100;
+        let accessoryAmount = amount * accessories / 100;
+        let emergencyAmount = amount * emergency / 100;
+        let savingAmount = amount * savings / 100;
+
+        $("#rentValue").text("₹" + rentAmount.toFixed(2));
+        $("#accessoryValue").text("₹" + accessoryAmount.toFixed(2));
+        $("#emergencyValue").text("₹" + emergencyAmount.toFixed(2));
+        $("#savingValue").text("₹" + savingAmount.toFixed(2));
+
+        $("#budgetTotal").text(
+            "Total Allocated: ₹" +
+            (rentAmount + accessoryAmount +
+            emergencyAmount + savingAmount).toFixed(2)
+        );
+
+        $("#budgetResult").slideDown();
+    });
+
+
+    // QUESTION 2: CAKE ORDER CALCULATOR
+
+    $("#orderCake").click(function() {
+
+        let colorQty = Number($("#colorCake").val());
+        let brownQty = Number($("#brownCake").val());
+        let milkyQty = Number($("#milkyCake").val());
+        let blackQty = Number($("#blackCake").val());
+
+        let quantities = [colorQty, brownQty, milkyQty, blackQty];
+
+        if (quantities.some(function(q) {
+            return !Number.isInteger(q) || q < 0;
+        })) {
+            alert("Please enter valid non-negative whole-number quantities.");
+            return;
+        }
+
+        let colorTotal = colorQty * 300;
+        let brownTotal = brownQty * 300;
+        let milkyTotal = milkyQty * 250;
+        let blackTotal = blackQty * 350;
+
+        let total = colorTotal + brownTotal +
+                    milkyTotal + blackTotal;
+
+        $("#cakeResult").text("Total Price: ₹" + total);
+
+        $("#cakeBreakdown").html(
+            "Color Cake: ₹" + colorTotal +
+            " | Brown Cake: ₹" + brownTotal +
+            "<br>Milky Cake: ₹" + milkyTotal +
+            " | Black Forest Cake: ₹" + blackTotal
+        );
+
+        $("#cakeResult").css("color", "#047857");
+
+        $(".purchase").slideDown();
+    });
+
+
+    // QUESTION 3: CAR BODY WORKSHOP
+
+    // Change body and roof colour
+
+    $("#bodyColor").on("input change", function() {
+
+        let color = $(this).val();
+
+        $("#carBody, #carRoof").css("background-color", color);
+
+        $("#carMessage").text(
+            "Car body colour changed successfully!"
+        );
+    });
+
+
+    // Change glass tint
+
+    $("#glassTint").change(function() {
+
+        $("#carWindow").css(
+            "background-color", $(this).val()
+        );
+
+        $("#carMessage").text(
+            "Car glass tint changed successfully!"
+        );
+    });
+
+
+    // Change tyre size
+
+    $("#tyreSize").on("input change", function() {
+
+        let size = Number($(this).val());
+
+        $(".wheel").css({
+            width: size + "px",
+            height: size + "px"
+        });
+
+        $("#tyreLabel").text(size + " px");
+
+        $("#carMessage").text(
+            "Tyre size updated to " + size + " px."
+        );
+    });
+
+
+    // Reset car to original settings
+
+    $("#resetCar").click(function() {
+
+        $("#bodyColor").val("#22c55e");
+        $("#glassTint").val("#bae6fd");
+        $("#tyreSize").val(57);
+
+        $("#carBody, #carRoof").css(
+            "background-color", "#22c55e"
+        );
+
+        $("#carWindow").css(
+            "background-color", "#bae6fd"
+        );
+
+        $(".wheel").css({
+            width: "57px",
+            height: "57px"
+        });
+
+        $("#tyreLabel").text("57 px");
+
+        $("#carMessage").text(
+            "Car settings reset successfully!"
+        );
+    });
+
+});
+</script>
+
+</body>
+</html>
